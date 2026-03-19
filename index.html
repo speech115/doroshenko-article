@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Матвей Дорошенко — Диагностика подсознания</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d12;
+    --bg-surface: #14141c;
+    --bg-elevated: #1a1a26;
+    --bg-terminal: #0a0a10;
+    --border: #2a2a3a;
+    --border-subtle: #1e1e2e;
+    --text: #e0dfe6;
+    --text-muted: #8888a0;
+    --text-dim: #5e5e78;
+    --accent: #8b5cf6;
+    --accent-2: #6366f1;
+    --accent-light: #a78bfa;
+    --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%);
+    --gradient-subtle: linear-gradient(135deg, rgba(139,92,246,0.08) 0%, rgba(99,102,241,0.04) 100%);
+    --gold: #f0c674;
+    --green: #6ee7b7;
+    --red: #fb7185;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --max-w: 720px;
+    --font: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  }
+
+  html { scroll-behavior: smooth; font-size: 17px; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: rgba(139, 92, 246, 0.35);
+    color: #fff;
+  }
+
+  /* ===== LAYOUT ===== */
+  .page { max-width: var(--max-w); margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 4rem 1rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80%;
+    left: -30%;
+    width: 160%;
+    height: 260%;
+    background: radial-gradient(ellipse at center, rgba(139,92,246,0.15) 0%, rgba(99,102,241,0.05) 40%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid rgba(139,92,246,0.4);
+    background: var(--bg-elevated);
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ===== TYPOGRAPHY ===== */
+  h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    margin-top: 3.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p { margin-bottom: 1.1rem; }
+  strong { color: #fff; font-weight: 600; }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 3rem 0;
+  }
+
+  /* ===== TERMINAL BLOCK ===== */
+  .terminal {
+    background: var(--bg-terminal);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    margin: 1.75rem 0;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+  }
+
+  .terminal-bar {
+    background: rgba(139,92,246,0.1);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .terminal-dot.r { background: var(--red); }
+  .terminal-dot.y { background: var(--gold); }
+  .terminal-dot.g { background: var(--green); }
+
+  .terminal-title {
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .terminal-body {
+    padding: 1.25rem 1.25rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .terminal-body .cmd { color: var(--green); }
+  .terminal-body .accent { color: var(--accent-light); }
+  .terminal-body .warn { color: var(--gold); }
+  .terminal-body .err { color: var(--red); }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    background: var(--gradient-subtle);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 1.25rem 1.5rem;
+    margin: 1.75rem 0;
+    font-style: italic;
+    line-height: 1.65;
+  }
+
+  .callout-big {
+    background: linear-gradient(135deg, rgba(139,92,246,0.12) 0%, rgba(99,102,241,0.06) 100%);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: var(--radius);
+    padding: 1.75rem 2rem;
+    margin: 2rem 0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #fff;
+    text-align: center;
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  /* ===== CASE CARD ===== */
+  .case-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .case-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--gradient-primary);
+  }
+
+  .case-name {
+    font-weight: 700;
+    color: var(--accent-light);
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .case-before {
+    color: var(--red);
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .case-after {
+    color: var(--green);
+    font-size: 0.9rem;
+  }
+
+  /* ===== VIDEO ===== */
+  .video-wrap {
+    margin: 1.5rem 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .video-wrap video {
+    width: 100%;
+    display: block;
+  }
+
+  .video-label {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  /* ===== PROOF GALLERY ===== */
+  .proof-gallery {
+    display: flex;
+    gap: 0.75rem;
+    margin: 1.75rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .proof-gallery img {
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    max-height: 140px;
+    width: auto;
+  }
+
+  .proof-caption {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.5rem;
+  }
+
+  /* ===== (img-slot removed — replaced by proof-gallery) ===== */
+
+  /* ===== CTA BUTTON ===== */
+  .cta-wrap {
+    text-align: center;
+    margin: 2.5rem 0;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: var(--gradient-primary);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 100px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(139,92,246,0.3);
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(139,92,246,0.45);
+  }
+
+  .cta-sub {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-top: 0.75rem;
+  }
+
+  /* ===== MEME/INSERT ===== */
+  .insert {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .insert-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .insert-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+  }
+
+  /* ===== OBJECTION ===== */
+  .objection {
+    margin-bottom: 1.5rem;
+  }
+
+  .objection-q {
+    font-weight: 700;
+    color: var(--red);
+    margin-bottom: 0.3rem;
+  }
+
+  .objection-a {
+    color: var(--text);
+    padding-left: 1rem;
+    border-left: 2px solid var(--border-subtle);
+  }
+
+  /* ===== COUNTER ===== */
+  .counter-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .counter-item {
+    text-align: center;
+  }
+
+  .counter-num {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-light);
+  }
+
+  .counter-label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 4rem;
+    color: var(--text-dim);
+    font-size: 0.78rem;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 640px) {
+    html { font-size: 15px; }
+    .page { padding: 1rem 1rem 3rem; }
+    .hero { padding: 2.5rem 0.5rem 2rem; }
+    .hero h1 { font-size: 1.7rem; }
+    h2 { font-size: 1.4rem; }
+    .callout-big { padding: 1.25rem; font-size: 1rem; }
+    .case-card { padding: 1.25rem; }
+    .counter-row { gap: 1.25rem; }
+    .counter-num { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="hero-photo">
+      <img src="/matvey.jpg" alt="Матвей Дорошенко">
+    </div>
+    <h1>Ты зарабатываешь деньги.<br>Но не чувствуешь себя собой.</h1>
+    <p class="hero-sub">Я заработал $100 000 в 17 лет. Потерял всё. И понял одну вещь, которую не расскажут ни на одном курсе по бизнесу.</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- ===== HOOK ===== -->
+  <section>
+    <p>Давай начистоту.</p>
+    <p>Ты можешь зарабатывать деньги. Можешь даже зарабатывать много. Но если внутри что-то не так, деньги уйдут. Здоровье посыпется. Отношения начнут разваливаться. И ты такой сидишь и не понимаешь: <strong>"Я же всё делал правильно."</strong></p>
+    <p>Ага. Всё правильно. Кроме одного.</p>
+    <p>Ты не управляешь своей жизнью. Твоё подсознание рулит. И оно не спрашивает твоего разрешения.</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot r"></span>
+        <span class="terminal-dot y"></span>
+        <span class="terminal-dot g"></span>
+        <span class="terminal-title">subconsciousness.exe</span>
+      </div>
+      <div class="terminal-body">
+        <span class="cmd">$</span> scan --mode=deep --target=life<br>
+        <br>
+        <span class="accent">[РЕЗУЛЬТАТ СКАНИРОВАНИЯ]</span><br>
+        <br>
+        &gt; Финансы: <span class="warn">нестабильно</span> (цикл: заработал → потерял → заработал → потерял)<br>
+        &gt; Энергия: <span class="err">утечка</span> (прокрастинация, тревога, ступор)<br>
+        &gt; Отношения: <span class="warn">шаблон</span> (повторяющийся сценарий)<br>
+        &gt; Решения: <span class="err">заблокированы</span> (страх ошибки, откладывание)<br>
+        <br>
+        <span class="err">⚠ ОБНАРУЖЕН НЕОСОЗНАННЫЙ СЦЕНАРИЙ</span><br>
+        <span class="accent">Источник: подсознательные программы, записанные до 7 лет</span><br>
+        <span class="cmd">Рекомендация: запустить диагностику</span>
+      </div>
+    </div>
+
+    <p>95% твоих решений принимает подсознание. Не ты, не твоя "сила воли", не учебники и курсы. Программы, которые записались в твою голову, когда тебе было года три. Может, раньше.</p>
+    <p>И пока ты эту программу не увидишь, ты будешь её выполнять. Всю жизнь. На автопилоте, даже не замечая.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== PROBLEM AGITATION ===== -->
+  <section>
+    <h2>Знакомо?</h2>
+
+    <p>Зарабатываешь, но деньги утекают. Всегда ноль к концу месяца. Или вот эти качели: разогнался, поднялся, потом опять на дно. И по кругу.</p>
+    <p>Знаешь, что надо делать, но не делаешь. Откладываешь. Саботируешь себя. Потом злишься, что опять.</p>
+    <p>Берёшь наставника, покупаешь курс, вроде всё понятно. Но результат не приходит. Или приходит, а потом куда-то сливается.</p>
+    <p>И есть ещё кое-что, что бесит сильнее всего: ощущение, что ты живёшь не свою жизнь. Внутри ты один, а снаружи какой-то другой человек.</p>
+
+    <div class="callout">
+      Ты думаешь, проблема в стратегии. В нише. В навыках. Что ты "недостаточно стараешься".<br><br>
+      Нет. Проблема глубже. Она в подсознании. И никакой курс по маркетингу её не решит.
+    </div>
+
+    <p>Это как годами пить таблетки от головной боли, когда причина в позвоночнике. Можешь глотать хоть горстями. Пока не дойдёшь до корня, голова будет болеть.</p>
+    <p>С подсознанием то же самое. Только масштаб другой.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== MASON / ELITE LAYER ===== -->
+  <section>
+    <h2>Почему у элит всё получается</h2>
+
+    <p>Вот что меня зацепило, когда я начал копать. Самые успешные люди в истории, Рокфеллеры, Ротшильды, ребята из Кремниевой долины, они все работали не с бизнес-стратегиями. Они работали с головой.</p>
+    <p>Рокфеллер вёл дневник визуализаций до 97 лет. Рэй Далио медитирует каждое утро, прежде чем управлять $150 миллиардами. Джобс ездил в дзен-монастырь. И это не "они могли себе позволить". Они стали теми, кем стали, в том числе поэтому.</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot r"></span>
+        <span class="terminal-dot y"></span>
+        <span class="terminal-dot g"></span>
+        <span class="terminal-title">history.log</span>
+      </div>
+      <div class="terminal-body">
+        <span class="accent">[АРХИВ: ТАЙНЫЕ ПРАКТИКИ]</span><br>
+        <br>
+        &gt; Масоны, XVIII век: ритуал инициации — завязанные глаза,<br>
+        &nbsp;&nbsp;сенсорная депривация, эмоциональное перепрограммирование.<br>
+        &nbsp;&nbsp;Результат: <span class="cmd">перезапись подсознания через тета-состояние</span><br>
+        <br>
+        &gt; Нейронаука, XXI век: сенсорная депривация перестраивает<br>
+        &nbsp;&nbsp;нейронные связи за 15 минут.<br>
+        &nbsp;&nbsp;Результат: <span class="cmd">подтверждение масонских практик 300 лет спустя</span><br>
+        <br>
+        <span class="warn">Совпадение? Маловероятно.</span>
+      </div>
+    </div>
+
+    <p>Масоны знали это 300 лет назад. Закрывали новичку глаза, помещали в темноту, создавали эмоциональный шок. В этот момент подсознание полностью открыто. Нейронаука называет это тета-состояние. Масоны называли это инициацией. Суть одна.</p>
+    <p>Элиты работали с подсознанием не потому, что это модно. А потому, что без этого не работает вообще ничего. Ни стратегии, ни связи, ни деньги.</p>
+    <p>А обычный человек? Покупает очередной курс. Ставит очередную цель. Пишет список дел на понедельник. И удивляется, почему в пятницу всё стоит на месте.</p>
+
+    <div class="callout-big">
+      Твои деньги = твоё подсознание.<br>
+      Не навыки, не связи, не "правильная ниша".<br>
+      Подсознание. Точка.
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== MATVEY'S STORY ===== -->
+  <section>
+    <h2>Я проверил это на себе</h2>
+
+    <p>Меня зовут Матвей. Мне 18.</p>
+    <p>В 16 лет я ворвался в крипту. Не просто "поигрался с биткоином" — я заработал больше $100 000. В 17 лет у меня было больше денег, чем у большинства взрослых, которых я знал.</p>
+    <p>И знаешь что? <strong>Мне было хреново.</strong></p>
+    <p>Деньги были. А ощущения себя не было. Я вообще не понимал, кто я такой. Не было радости. Было чувство, что всё это чужое. Деньги чужие, успех чужой, как будто я играю в чью-то чужую жизнь и плохо справляюсь с ролью.</p>
+
+    <div class="proof-gallery">
+      <img src="/proof-14538.png" alt="Receive +14 538 USDT">
+      <img src="/proof-22766.png" alt="Receive +22 766 USDT">
+      <img src="/proof-65734.jpg" alt="Receive +65 734 USDT">
+    </div>
+    <div class="proof-caption">Реальные транзакции. В сумме — больше $100 000.</div>
+
+    <p>А потом деньги кончились. Быстро. Когда подсознание работает против тебя, оно найдёт способ избавиться от того, что "не твоё". Тупые решения, эмоциональные покупки, сделки, на которые нормальный человек не подписался бы. Всё как будто само собой складывалось в одну кучу.</p>
+    <p>И вот ты сидишь. Ноль на счету, ноль внутри, и полное непонимание, как ты тут оказался.</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot r"></span>
+        <span class="terminal-dot y"></span>
+        <span class="terminal-dot g"></span>
+        <span class="terminal-title">matvey_log.txt</span>
+      </div>
+      <div class="terminal-body">
+        <span class="accent">[16 лет]</span> Вошёл в крипту. Заработал $100k+<br>
+        <span class="accent">[17 лет]</span> Деньги есть. Себя — <span class="err">нет</span><br>
+        <span class="accent">[17.5]</span>&nbsp;&nbsp; Деньги ушли. Кризис. Пустота.<br>
+        <span class="accent">[17.8]</span>&nbsp;&nbsp; Начал копать тему сознания<br>
+        <span class="accent">[18 лет]</span> <span class="cmd">Всё изменилось.</span><br>
+        <br>
+        <span class="warn">Вывод: $100k без работы с подсознанием = временная иллюзия</span>
+      </div>
+    </div>
+
+    <p>И вот тогда я начал копать. Но не курсы по бизнесу и не мотивационные ролики. Я полез в то, куда нормальные люди обычно не заглядывают: подсознание, нейронаука, тайные знания. Практики, которые кто-то использовал веками, пока остальные думали, что это ерунда.</p>
+    <p>Юнг. Диспенза. Годдард. Масонские ритуалы. Исследования Стэнфорда и Гарварда про нейропластичность. Я читал всё подряд и пробовал на себе.</p>
+    <p>И в какой-то момент я нашёл свою программу. Тот самый неосознанный сценарий, который крутился в моей голове с детства и сливал мне деньги, энергию, вообще всё. Я его увидел. Реально увидел, как строчку кода, которая баговала всю систему.</p>
+    <p>Когда я начал это менять, деньги вернулись. Но дело не в деньгах. <strong>Вернулся я сам.</strong> Появилась ясность. Опора внутри. Я стал понимать, куда иду и зачем.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== WHAT I DO ===== -->
+  <section>
+    <h2>Что я делаю</h2>
+
+    <p>Ко мне приходит человек и называет проблему. Деньги не держатся. Или прокрастинация. Или нет ясности, не может принять решение, чувствует, что живёт не свою жизнь. У каждого своё, но корень обычно один.</p>
+    <p>Я нахожу подсознательную программу, которая за этим стоит. И мы её меняем.</p>
+    <p>Не "подумай позитивно". Не аффирмации перед зеркалом. Я работаю с корнем, с тем кодом, который записался в тебя до 7 лет и с тех пор рулит всей твоей жизнью.</p>
+
+    <div class="insert">
+      <div class="insert-label">Как это работает</div>
+      <div class="insert-text">Человек называет проблему.<br>Я нахожу программу за ней.<br>Мы её меняем. Возвращается опора и ясность.</div>
+    </div>
+
+    <p>Эти методы не я придумал. Масонские ложи использовали сенсорную депривацию при инициации ещё в XVIII веке. Нейронаука только сейчас догоняет: в тета-состоянии мозг перестраивает нейронные связи за минуты. А Рокфеллеры передавали практику визуализации из поколения в поколение.</p>
+    <p>Я просто взял то, что работало столетиями, выкинул мистику, наложил нейронауку и адаптировал под живого человека.</p>
+    <p>Через это уже прошли 16 человек.</p>
+
+    <div class="counter-row">
+      <div class="counter-item">
+        <div class="counter-num">16</div>
+        <div class="counter-label">людей прошли<br>диагностику</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num">18</div>
+        <div class="counter-label">лет Матвею</div>
+      </div>
+      <div class="counter-item">
+        <div class="counter-num">$100k+</div>
+        <div class="counter-label">заработал и потерял,<br>чтобы понять</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== CASE STUDIES ===== -->
+  <section>
+    <h2>Люди, которые уже прошли через это</h2>
+
+    <div class="case-card">
+      <div class="case-name">Тимофей Дубицкий</div>
+      <div class="case-before">Было: не понимал, как действовать, не видел свой путь</div>
+      <div class="case-after">Стало: понял, как ему надо действовать. Нашёл свой стиль, свою харизму, увидел, куда вообще идти. Говорит, впервые появилась ясность.</div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-name">Данила Козлов</div>
+      <div class="case-before">Было: застрял, не мог сдвинуться с точки, внутреннее сопротивление</div>
+      <div class="case-after">Стало: нашёл программу, которая блокировала рост. Появилась ясность и энергия действовать.</div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-name">Сергей Иванов</div>
+      <div class="case-before">Было: прокрастинация, не мог начать, серьёзный психологический блок</div>
+      <div class="case-after">Стало: сдвинулся с мёртвой точки. Записал первые видео на YouTube, чего не мог сделать вообще. Разрулил психологический вопрос, с которым сам бы ещё долго сидел.</div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-name">Егор Каменский</div>
+      <div class="case-before">Было: нет фокуса, распылялся на всё подряд, не мог выбрать направление</div>
+      <div class="case-after">Стало: нашёл корневую программу, которая мешала сфокусироваться. Определился с направлением и начал действовать.</div>
+    </div>
+
+    <p>Все четверо пришли с разными проблемами. Все четверо получили результат. Не через полгода и не через 100 сессий. Мы находили одну программу, которая стояла за всем, и меняли её.</p>
+
+    <!-- VIDEO TESTIMONIALS -->
+    <h3>Видео-отзывы</h3>
+
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline>
+        <source src="/review-1-sergey.mp4" type="video/mp4">
+      </video>
+      <div class="video-label">Тимофей Дубицкий</div>
+    </div>
+
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline>
+        <source src="/review-2-egor.mp4" type="video/mp4">
+      </video>
+      <div class="video-label">Данила Козлов</div>
+    </div>
+
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline>
+        <source src="/review-3-timofey.mp4" type="video/mp4">
+      </video>
+      <div class="video-label">Сергей Иванов</div>
+    </div>
+
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline>
+        <source src="/review-4-danila.mp4" type="video/mp4">
+      </video>
+      <div class="video-label">Егор Каменский</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== PARADIGM SHIFT ===== -->
+  <section>
+    <h2>Почему курсы не работают</h2>
+
+    <p>Ты покупаешь курс по заработку. Там всё логично. Пошаговая инструкция, всё разжёвано.</p>
+    <p>Но ты не делаешь. Или делаешь, а результата нет. Или результат есть, но через месяц сливается обратно в ноль.</p>
+    <p>Почему так?</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="terminal-dot r"></span>
+        <span class="terminal-dot y"></span>
+        <span class="terminal-dot g"></span>
+        <span class="terminal-title">diagnosis.exe</span>
+      </div>
+      <div class="terminal-body">
+        <span class="cmd">$</span> analyze --why-courses-fail<br>
+        <br>
+        <span class="accent">Курс даёт:</span> стратегию, навыки, информацию<br>
+        <span class="accent">Курс НЕ даёт:</span> работу с подсознательным сопротивлением<br>
+        <br>
+        <span class="err">Проблема:</span> подсознание блокирует исполнение<br>
+        <span class="warn">Причина:</span> внутренняя программа "я недостоин / это не для меня /
+        мне опасно быть успешным"<br>
+        <br>
+        <span class="cmd">Аналогия: ты ставишь навигатор на Москву,</span><br>
+        <span class="cmd">но руль заблокирован влево.</span><br>
+        <span class="cmd">Ты знаешь КУДА. Но не можешь ЕХАТЬ.</span>
+      </div>
+    </div>
+
+    <p>Информация без работы с подсознанием это как заливать бензин в машину со сломанным двигателем. Можешь залить полный бак. Хоть премиум. Она не поедет.</p>
+    <p>Я это проверил на собственных деньгах. $100 000 на крипте. Знания были. Навыки были. И всё равно деньги ушли, потому что внутри стояла программа, которая не давала мне их удержать. Я тогда даже не знал, что такая штука существует.</p>
+    <p><strong>Пока программа на месте, результат будет временным.</strong></p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== DIAGNOSTIC OFFER ===== -->
+  <section>
+    <h2>Бесплатная диагностика подсознания</h2>
+
+    <p>Давай так. 15 минут. Я нахожу твою главную подсознательную программу, ту, которая прямо сейчас тормозит тебя сильнее всего.</p>
+    <p>Бесплатно. Без обязательств. Без "а потом мы тебе продадим курс за 500 000".</p>
+    <p>Я делаю это, потому что знаю одну вещь: когда человек видит свою программу, он уже не может её развидеть. Как с оптической иллюзией. Увидел, и всё. И дальше сам решает, что делать.</p>
+
+    <div class="insert">
+      <div class="insert-label">Что ты получишь за 15 минут</div>
+      <div class="insert-text">
+        Программа, которая тебя тормозит. Где она сидит и откуда взялась.<br>
+        И что с этим можно сделать.
+      </div>
+    </div>
+
+    <div class="cta-wrap">
+      <!-- TODO: заменить на реальную ссылку Яндекс.Формы -->
+      <a href="#form" class="cta-btn">Записаться на диагностику</a>
+      <div class="cta-sub">Бесплатно. 15 минут. Zoom или Telegram.</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== OBJECTIONS ===== -->
+  <section>
+    <h2>У тебя сейчас в голове возражения. Давай разберём.</h2>
+
+    <div class="objection">
+      <div class="objection-q">"Тебе 18 лет, какой опыт?"</div>
+      <div class="objection-a">Мне 18. В этом возрасте я заработал и потерял больше $100k. Прошёл через такой кризис, из которого многие не выходят и в 40. Провёл 16 консультаций, у каждого были результаты. Я не жду, пока жизнь меня поломает, я иду и разбираюсь сам.</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-q">"Это какая-то эзотерика?"</div>
+      <div class="objection-a">Нет. Работа с подсознанием это нейронаука. Тета-состояние, нейропластичность, эмоциональное кодирование, всё это подтверждено исследованиями в Стэнфорде и Гарварде. Да, масоны использовали похожие штуки 300 лет назад. Но мне интересна не мистика. Мне интересно то, что работает.</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-q">"У меня всё нормально с деньгами"</div>
+      <div class="objection-a">Деньги это один из симптомов. Подсознательные программы влияют вообще на всё: на энергию, на отношения, на здоровье, на то, как ты принимаешь решения. Если где-то буксуешь, если чувствуешь, что живёшь не на полную, программа есть. Она просто маскируется под "ну у меня и так норм".</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-q">"Я уже работал с психологом / наставником"</div>
+      <div class="objection-a">Если бы это решило проблему, ты бы сейчас не читал эту статью. Классическая психология копается в сознании. Я работаю с подсознанием. Это как разница между покраской стен и заменой фундамента.</div>
+    </div>
+
+    <div class="objection">
+      <div class="objection-q">"Бесплатная диагностика — значит, потом будешь впаривать"</div>
+      <div class="objection-a">За 15 минут ты увидишь свою программу. Это уже ценно само по себе. Что делать дальше, решай сам. Я не умею впаривать. Мне 18, этот навык я как-то пропустил и осваивать не планирую.</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ===== MASON CLOSER ===== -->
+  <section>
+    <p>Вот что я понял за последний год.</p>
+    <p>Масоны, элиты, вообще все, у кого реально получалось, работали с одним и тем же. С подсознанием. Не потому что это "духовно". Потому что без этого ты крутишь педали на месте и думаешь, что едешь.</p>
+    <p>Можешь продолжать искать ответ в курсах и книгах. Можешь потратить ещё год. Или три.</p>
+    <p>А можешь за 15 минут увидеть, что тебя тормозит. И дальше решить сам.</p>
+
+    <div class="callout-big">
+      Ты дочитал до сюда. Это уже кое-что говорит.<br>
+      Вопрос: что дальше?
+    </div>
+
+    <div class="cta-wrap">
+      <!-- TODO: заменить на реальную ссылку Яндекс.Формы -->
+      <a href="#form" class="cta-btn">Записаться на бесплатную диагностику</a>
+      <div class="cta-sub">Заполни форму. Я свяжусь лично.</div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    Матвей Дорошенко &middot; 2026
+  </footer>
+
+</div>
+</body>
+</html>
